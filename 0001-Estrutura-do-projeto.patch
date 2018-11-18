@@ -1,0 +1,655 @@
+From 9a199beb005a494083864ba4b6b27fc173758669 Mon Sep 17 00:00:00 2001
+From: Daniela <rosa@gmail.com>
+Date: Sun, 18 Nov 2018 12:58:27 -0200
+Subject: [PATCH] Estrutura do projeto
+
+---
+ Letters.dat                                   | Bin 0 -> 52 bytes
+ UTFnames.dat                                  | Bin 0 -> 29 bytes
+ conf.properties                               |   4 +
+ src/test/java/dataAnalysis/Configuration.java |  35 +++++++
+ src/test/java/dataAnalysis/Exemplo.java       |  61 ++++++++++++
+ src/test/java/dataAnalysis/Layout.java        |  17 ++++
+ .../java/dataAnalysis/LayoutTreatment.java    |  33 +++++++
+ src/test/java/dataAnalysis/ProcessData.java   |  89 ++++++++++++++++++
+ src/test/java/dataAnalysis/Report.java        |  41 ++++++++
+ src/test/java/dataAnalysis/Teste.java         |  60 ++++++++++++
+ .../dataAnalysis/Configuration.class          | Bin 0 -> 1787 bytes
+ .../test-classes/dataAnalysis/Exemplo.class   | Bin 0 -> 2333 bytes
+ target/test-classes/dataAnalysis/Layout.class | Bin 0 -> 1249 bytes
+ .../dataAnalysis/LayoutTreatment.class        | Bin 0 -> 1808 bytes
+ .../dataAnalysis/ProcessData.class            | Bin 0 -> 2948 bytes
+ target/test-classes/dataAnalysis/Report.class | Bin 0 -> 1102 bytes
+ target/test-classes/dataAnalysis/Teste.class  | Bin 0 -> 1155 bytes
+ 17 files changed, 340 insertions(+)
+ create mode 100644 Letters.dat
+ create mode 100644 UTFnames.dat
+ create mode 100644 conf.properties
+ create mode 100644 src/test/java/dataAnalysis/Configuration.java
+ create mode 100644 src/test/java/dataAnalysis/Exemplo.java
+ create mode 100644 src/test/java/dataAnalysis/Layout.java
+ create mode 100644 src/test/java/dataAnalysis/LayoutTreatment.java
+ create mode 100644 src/test/java/dataAnalysis/ProcessData.java
+ create mode 100644 src/test/java/dataAnalysis/Report.java
+ create mode 100644 src/test/java/dataAnalysis/Teste.java
+ create mode 100644 target/test-classes/dataAnalysis/Configuration.class
+ create mode 100644 target/test-classes/dataAnalysis/Exemplo.class
+ create mode 100644 target/test-classes/dataAnalysis/Layout.class
+ create mode 100644 target/test-classes/dataAnalysis/LayoutTreatment.class
+ create mode 100644 target/test-classes/dataAnalysis/ProcessData.class
+ create mode 100644 target/test-classes/dataAnalysis/Report.class
+ create mode 100644 target/test-classes/dataAnalysis/Teste.class
+
+diff --git a/Letters.dat b/Letters.dat
+new file mode 100644
+index 0000000000000000000000000000000000000000..614d2f6b210c498b14503124547ad6430d7afbf6
+GIT binary patch
+literal 52
+tcmV~$g#myd006MPir9q;=JjrZN>ppKI=#VYGFz;Y&F+vDr_1f}`hFGs3m^ah
+
+literal 0
+HcmV?d00001
+
+diff --git a/UTFnames.dat b/UTFnames.dat
+new file mode 100644
+index 0000000000000000000000000000000000000000..ec16a3c82a0e934f6da225f7eb938627bb0c1c68
+GIT binary patch
+literal 29
+icmZQz3r{R6O3h<nbxKXnu4G{K$j`|EQqCDU`KbVQsR(8O
+
+literal 0
+HcmV?d00001
+
+diff --git a/conf.properties b/conf.properties
+new file mode 100644
+index 0000000..48e5933
+--- /dev/null
++++ b/conf.properties
+@@ -0,0 +1,4 @@
++#Author:Jefferson
++#Sun Nov 18 11:27:40 BRST 2018
++directoryPathIn\ IN=\\data\\in
++directoryPathOut\ OUT=\\data\\out
+diff --git a/src/test/java/dataAnalysis/Configuration.java b/src/test/java/dataAnalysis/Configuration.java
+new file mode 100644
+index 0000000..c18ed64
+--- /dev/null
++++ b/src/test/java/dataAnalysis/Configuration.java
+@@ -0,0 +1,35 @@
++package dataAnalysis;
++
++import java.io.FileInputStream;
++import java.io.FileWriter;
++import java.io.IOException;
++import java.util.Properties;
++
++public class Configuration {
++
++	public void generatingConfigurationFile() throws IOException {
++		Properties properties = new Properties();
++		properties.setProperty("directoryPath IN", "\\data\\in");
++		properties.setProperty("directoryPath OUT", "\\data\\out");
++		FileWriter writer = new FileWriter("conf.properties");
++		properties.store(writer, "Author:Jefferson");
++		writer.close();
++
++	}
++
++	public static Properties getProp() throws IOException {
++		Properties props = new Properties();
++		FileInputStream file = new FileInputStream("conf.properties");
++		props.load(file);
++		return props;
++
++	}
++
++	public String configurationFile(String caminho) throws IOException {
++		Properties prop = getProp();
++		String properties = prop.getProperty(caminho);
++		 String path = System.getProperty("user.home");
++		return path+properties;
++	}
++
++}
+diff --git a/src/test/java/dataAnalysis/Exemplo.java b/src/test/java/dataAnalysis/Exemplo.java
+new file mode 100644
+index 0000000..ef9cb84
+--- /dev/null
++++ b/src/test/java/dataAnalysis/Exemplo.java
+@@ -0,0 +1,61 @@
++package dataAnalysis;
++
++import java.util.ArrayList;
++import java.util.Iterator;
++import java.util.Scanner;
++
++public class Exemplo {
++
++	public static void main(String[] args) {
++		Scanner ler = new Scanner(System.in);
++
++		// [ A ] declarando e instanciando uma agenda de contatos
++		ArrayList<String> agenda = new ArrayList();
++
++		// [ B ] usando o método add() para gravar 4 contatos na agenda
++		agenda.add("Juca Bala;11 1111-1111");
++		agenda.add("Marcos Paqueta;22 2222-2222");
++		agenda.add("Maria Antonieta;33 3333-3333");
++		agenda.add("Antônio Conselheiro;44 4444-4444");
++
++		int i;
++
++		// [ C ] mostrando os "n" contatos da agenda (usando o índice)
++		// número de elementos da agenda: método size()
++		System.out.printf("Percorrendo o ArrayList (usando o índice)\n");
++		int n = agenda.size();
++		for (i = 0; i < n; i++) {
++			System.out.printf("Posição %d- %s\n", i, agenda.get(i));
++		}
++
++		System.out.printf("\nInforme a posição a ser excluída:\n");
++		i = ler.nextInt();
++
++		try {
++			// [ D ] remove o i-ésimo contato da agenda
++			agenda.remove(i);
++		} catch (IndexOutOfBoundsException e) {
++			// exceção lançada para indicar que um índice (i)
++			// está fora do intervalo válido (de 0 até agenda.size()-1)
++			System.out.printf("\nErro: posição inválida (%s).", e.getMessage());
++		}
++
++		// [ E ] mostrando os "n" contatos da agenda (usando for-each)
++		System.out.printf("\nPercorrendo o ArrayList (usando for-each)\n");
++		i = 0;
++		for (String contato : agenda) {
++			System.out.printf("Posição %d- %s\n", i, contato);
++			i++;
++		}
++
++		// [ F ] mostrando os "n" contatos da agenda (com iterator)
++		System.out.printf("\nPercorrendo o ArrayList (usando iterator)\n");
++		i = 0;
++		Iterator<String> iterator = agenda.iterator();
++		while (iterator.hasNext()) {
++			System.out.printf("Posição %d- %s\n", i, iterator.next());
++			i++;
++		}
++	}
++
++}
+\ No newline at end of file
+diff --git a/src/test/java/dataAnalysis/Layout.java b/src/test/java/dataAnalysis/Layout.java
+new file mode 100644
+index 0000000..0b0dbdf
+--- /dev/null
++++ b/src/test/java/dataAnalysis/Layout.java
+@@ -0,0 +1,17 @@
++package dataAnalysis;
++
++public enum Layout {
++
++	UM("001"), DOIS("002"), TRES("003");
++
++	private String descricao;
++
++	Layout(String descricao) {
++		this.descricao = descricao;
++	}
++
++	public String getDescricao() {
++		return descricao;
++	}
++
++}
+diff --git a/src/test/java/dataAnalysis/LayoutTreatment.java b/src/test/java/dataAnalysis/LayoutTreatment.java
+new file mode 100644
+index 0000000..45dc41e
+--- /dev/null
++++ b/src/test/java/dataAnalysis/LayoutTreatment.java
+@@ -0,0 +1,33 @@
++package dataAnalysis;
++
++public class LayoutTreatment {
++	public Boolean retornoTratamento(String name) {
++		Boolean valido = Boolean.FALSE;
++		// Validando layout
++		for (Layout layoutValido : Layout.values()) {
++			if (layoutValido.getDescricao().equals(name.substring(0, 3))) {
++				valido = Boolean.TRUE;
++			}
++		}
++
++		return valido;
++	}
++
++	public String treatmentSpecificLayout(String layouts) {
++
++		String layout[] = layouts.split("ç");
++		for (int i = 0; i < layout.length; i++) {
++
++			// System.out.println(layout[i]+"\n");
++			if (layout[i].contains("003")) {
++				String retorno = layout[2].substring(1, layout[2].length() - 1);
++				String[] r = retorno.split(",");
++				System.out.print(r[0] + "\n");
++				System.out.print(r[1] + "\n");
++				System.out.print(r[2] + "\n");
++			}
++
++		}
++		return layouts;
++	}
++}
+diff --git a/src/test/java/dataAnalysis/ProcessData.java b/src/test/java/dataAnalysis/ProcessData.java
+new file mode 100644
+index 0000000..a995ccf
+--- /dev/null
++++ b/src/test/java/dataAnalysis/ProcessData.java
+@@ -0,0 +1,89 @@
++package dataAnalysis;
++
++import java.io.DataInputStream;
++import java.io.DataOutputStream;
++import java.io.EOFException;
++import java.io.FileInputStream;
++import java.io.FileNotFoundException;
++import java.io.FileOutputStream;
++import java.io.IOException;
++import java.util.ArrayList;
++
++import dataAnalysis.LayoutTreatment;
++import model.Cliente;
++
++public class ProcessData {
++    
++
++	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
++	   
++	    Configuration configuration = new Configuration();
++	    
++	    //System.out.println(configuration.configurationFile());
++
++		ProcessData obj = new ProcessData();
++		obj.run();
++	}
++
++	private static void writeToBinaryFile() throws FileNotFoundException, IOException {
++		String layouts[] = { "001ç1234567891234çDiegoç50000", "001ç3245678865434çRenatoç40000.99",
++							 "002ç2345675434544345çJose da SilvaçRural", "002ç2345675433444345çEduardo PereiraçRural",
++							 "003ç10ç[1-10-100,2-30-2.50,3-40-3.10]çDiego", "003ç08ç[1-34-10,2-33-1.50,3-40-0.10]çRenato" };
++
++		FileOutputStream fstream = new FileOutputStream("C:\\Users\\Daniela\\Music\\arquivo.dat");
++		DataOutputStream outputFile = new DataOutputStream(fstream);
++
++		System.out.println("inserting data into files");
++
++		for (int i = 0; i < layouts.length; i++)
++			outputFile.writeUTF(layouts[i]);
++
++		System.out.println("*** Performed the insertion of sequences into a binary file.");
++		outputFile.close();
++	}
++
++	private static void readBinaryFile() throws FileNotFoundException, IOException {
++		String fileContent;
++		boolean endOfFile = false;
++		FileInputStream fstream = new FileInputStream("C:\\Users\\Daniela\\Music\\arquivo.dat");
++		DataInputStream inputFile = new DataInputStream(fstream);
++		
++		System.out.println("Reading the names from the file:");
++		
++		while (!endOfFile) {
++			try {
++				fileContent = inputFile.readUTF();	
++//				LayoutTreatment layoutTreatment = new LayoutTreatment();
++//				layoutTreatment.retornoTratamento(fileContent);
++			
++				Report report = new Report();
++				report.customerQuantity(fileContent);
++				
++				System.out.println(report.QuantityOfSeller(fileContent));	
++				System.out.println(report.mostExpensiveSale(fileContent));
++				System.out.println(report.WorstSeller(fileContent));
++				
++				
++
++			} catch (EOFException e) {
++				endOfFile = true;
++			}			
++		}
++		inputFile.close();
++	}
++
++	public void run() {
++
++		try {
++
++			writeToBinaryFile();
++			readBinaryFile();
++
++		} catch (FileNotFoundException e) {
++			e.printStackTrace();
++		} catch (IOException e) {
++			e.printStackTrace();
++		}
++
++	}
++}
+diff --git a/src/test/java/dataAnalysis/Report.java b/src/test/java/dataAnalysis/Report.java
+new file mode 100644
+index 0000000..eadc8f0
+--- /dev/null
++++ b/src/test/java/dataAnalysis/Report.java
+@@ -0,0 +1,41 @@
++package dataAnalysis;
++
++public class Report {
++	// Quantidade de clientes no arquivo de entrada
++
++	public int customerQuantity(String layouts) {
++		int soma = 0;
++		String layout[] = layouts.split("ç");
++		for (int i = 0; i < layout.length; i++) {
++			if (layout[i].contains("002")) {
++				soma = soma + 1;
++			}
++		}
++		return soma;
++		
++	}
++
++	// Quantidade de vendedor no arquivo de entrada
++	public int QuantityOfSeller(String layouts) {
++		int soma = 0;
++		String layout[] = layouts.split("ç");
++		for (int i = 0; i < layout.length; i++) {
++			if (layout[i].contains("001")) {
++				soma = soma + 1;
++			}
++		}
++		return soma;
++	}
++
++	// ID da venda mais cara
++	public String mostExpensiveSale(String layouts) {
++		  
++		return layouts;
++	}
++
++	// Pior vendedor de todos os tempos
++	public String WorstSeller(String layouts) {
++
++		return layouts;
++	}
++}
+diff --git a/src/test/java/dataAnalysis/Teste.java b/src/test/java/dataAnalysis/Teste.java
+new file mode 100644
+index 0000000..d7bd362
+--- /dev/null
++++ b/src/test/java/dataAnalysis/Teste.java
+@@ -0,0 +1,60 @@
++package dataAnalysis;
++
++import java.io.FileInputStream;
++import java.io.FileWriter;
++import java.io.IOException;
++import java.util.Properties;
++
++public class Teste {
++	
++	
++	public static Properties getProp() throws IOException {
++        Properties props = new Properties();
++        FileInputStream file = new FileInputStream(
++                "conf.properties");
++        props.load(file);
++        return props;
++ 
++    }
++//	public static void main(String[] args) throws IOException {
++//		
++//		Properties properties = new Properties();
++//		properties.setProperty("directoryPath IN", "\\data\\in");
++//		properties.setProperty("directoryPath OUT", "\\data\\out");
++//		FileWriter writer = new FileWriter("conf.properties");
++//		properties.store(writer,"Author:Jefferson");
++//		writer.close();
++//
++//		    Properties prop = getProp();
++//         
++//	        String login = prop.getProperty("projeto");
++//	   
++//	         
++//	        System.out.println("Login = " + login);
++//	       
++//		
++////		String texto= "001ç1234567891234çDiegoç50000,001ç3245678865434çRenatoç40000.99,002ç2345675434544345çJose da SilvaçRural,002ç2345675433444345çEduardo PereiraçRural,003ç10ç[1-10-100,2-30-2.50,3-40-3.10]çDiego,003ç08ç[1-34-10,2-33-1.50,3-40-0.10]çRenato";
++////		String frutas[] = texto.split(",");
++////		for (int i = 0; i < frutas.length; i++) {
++////
++////			System.out.println(frutas[i]); //imprime banana
++////		
++////		}
++////		LayoutTreatment tratamentoLayout = new LayoutTreatment();
++////		tratamentoLayout.treatmentSpecificLayout("003ç08ç[1-34-10,2-33-1.50,3-40-0.10]çRenato");
++//		
++//		
++//		
++	//}
++	
++	public static void main(String[] args)
++	{
++		int soma = 0;
++		for(int i =0; i<=100; i=i+2)
++		{
++			soma = soma + i;
++		}
++		System.out.println("A soma é " + soma);
++	}
++
++}
+diff --git a/target/test-classes/dataAnalysis/Configuration.class b/target/test-classes/dataAnalysis/Configuration.class
+new file mode 100644
+index 0000000000000000000000000000000000000000..e4dbacd69e84401d6e6847ca4f9cc2c836188df2
+GIT binary patch
+literal 1787
+zcma)6eN!7n9DbH2+!0P&uI0U@pnyPtRIRp>S_Ldhn*a(8M$vjC8*-iGE^~LO=5J^G
+zJo-;yWX2ERhjM)O?g-(<87DKjz1!X2^YVLk|NiICzW}_CvW6akv9c9dtBzG``L>@~
+zcb$rT)by;tb{!1~fm^SwH&&)*IY*i8!`HGD2=qR&9Xog`aAR)1Adpyh%QA%<=rfQ+
+zufWZm?Z~ZW{ZM*))?rNwm^rs()e4qptM~Y0BB<KFz}?(`Gsp^zA4x|lKF-kvavQcP
+zoO<?4Nj4N&U&DaF?U1eQW;VAwGa7CS+zBU|fnCe&cy2>_fi3+MO!Vm(qRO)EQJd?v
+zcC4T}xw)ldL_j}K)DCP%EgUm2j=KW=z6|0LErG{#xpRYd1CKPbSHH}6eTrPn>X;B1
+zxCp!ba!<#kKwpIGHUkas(7iKJO7p&F2h!6qO`l8b)^eju&J<=<58e|PyoT3&LB~9`
+zt~P_J>#aPOm5TIyH&mB4u!tprq)!uQ>`c6$Rz`@|sVbx}g^Ym*s_V&8&Gl7F&It(&
+zMZz!n&bIdc9O__Wq7}qBSI2qnC~{d~WG;5^auE%W1%|u5*>oDsfK8BAJ%vY@Rc*@}
+zc!E!v(wb|PRkaRY*XpdwaZ(XyAQP1^TBDtXidgqz_Dwn8IVWmfVD>u4qZ;AqiNleC
+zz!wHS!pDl;hJi1!#!$s_nah@rO-7*UOK-XA)_JmCU_(Rh!cp99`GKr!*gA8d3u3Kl
+z*UHjMVF%x6`1<0$Frfx^u}6>JShc3yu3X|C2edo09qxH$Y99LrzD1E;v>FZR(AK5@
+zB|c`BRVBVRaDX3p#sW90&M2I9x=W0TLdmMzPSsV{$d$9kcB!_h2M;dOx9c{&l8jnn
+zUbr!q)n*2k_ZIIzAi)vuEB<SI%kU}qOfDQl|AT`br1-C<0UiDPH=+f6zQs3zw>jH`
+zn;ffBx56^NvA8P#;1p)@nCVWNgXVA>qx)&|o_SvlPBB$9-#x}mKD}tpwXv|+#_~Dh
+zL|CVvm<9%jG)A0hqNItCVPq7O$p|B6qGOKN`3K}M%`YF~AzAgQgk51*<h~y6AC1|)
+zIK`uo%O|;obQ>!RzjHDYZc-F5NE$-~9p-N&gdXC&PGV092+nBu44)HPU=?du0DmQ5
+zlIvzpu%2He#Ir5)s}nq5Nt_~I98H{H`xq~m+9<T~-DU85q%grQ+$Y>*2>viC7VBnN
+g{D@bCPOz;%k&vQ3PA^^&b^v!^ain^47|JUB3ljFBDgXcg
+
+literal 0
+HcmV?d00001
+
+diff --git a/target/test-classes/dataAnalysis/Exemplo.class b/target/test-classes/dataAnalysis/Exemplo.class
+new file mode 100644
+index 0000000000000000000000000000000000000000..fea265f963e79a662aab8075ba680eb13a14b3f0
+GIT binary patch
+literal 2333
+zcma)7OK)367(El)vE$y-ylI*~ZrY~UO&m9mK8QmgY1878G@&U8X?acTNpg#QZ+h=_
+zNXlbX3Go+LAXO}~KwY##DNun>vt!2&38`zu9<eIrj30?pir`9~8PE64`Ocj0o0*^f
+z`tAn+z4$nc8iD4l^yP>xb8DXECC64(emUoa5frGuE>~nSC+)@L<otD&@dav!EZg#j
+z1p=}7j6m?LlT}d!P-h^7T7f;|maQ%o^7G2QBIk2TpmE&E$lQ!{E&abd8T6MdPoQ=D
+zS+P^Z%}dLsJ$7w;o5Qs4TJ~ZpJ`+ZRKts_`@U2{OIwNgcxpinlOBl^Nh)=J1zRDYD
+z#q$C+8nmSZX*tQXy<G5#s$@PDMLpW|CiV&JjXl#v2i`Bxv>kZFb>-T)<@r&xqb`C&
+zq<pcEk>;q($y9Hz*~>4X8|~0x;4qF*I+@LqMmb28ys7xr2s#DYC#0KkJabCkC@5d1
+z`ufa1ehJ+~@Pfd8I#|*iv3<w3v`2rx+0QSbn+W0p9kgwJZCj3c*0DX6TT+(mqy`4e
+z0e%VHXtlZwbR$7VPJy}I7G{b<SA>ZmDbO{g$jEh-opnsd+}gJpD|oUrw|U3TS{W6O
+zMp;??Vf0m$qR>@%1_p4Fb+oKQEC>u$%TUg6b<#_Pmx^y?qza2kYsYB=XYe9R#<Om+
+z+*p_C2v|Z5Q;uhCu5W(nn4Q^#+3AtkOL#d97H_F`ipr;LUo9%vz$+LL2(QRoK~0iZ
+zYb;%kS?yMgc-Fu<j4{-r(yHxrEc1=vg21t8+Fo$nyfUS^yv0VEo^nmKn#mP5?_}j5
+zdDSCr;G*6|*jB4PIq98^8<@~>YF(9gR#XI&0%ml~b)CT~ILltyyq&YM(u{R_@t!DN
+z$8;E%1&(Z=oV1-)tCIzPa$(dd*jaCEHKUe&%drhy!5acm?qouFo?N7Y&9Ul@ms1kK
+zEUO^;UuD4ECX~!9=_+W)oPn#jCJ?cF<x1aiwX9|E;=xUq=Tp1zHr@^69bOmPr>kN$
+z@E#-+tfhIHURmxiGCNOw@v6|M%D@5^DeRK;E)@Y-Av|W*|JhE3cRb4Q(p}`0)l^-a
+zWpP*vImOL2m5Q|bPGTX}QdK+44V2GU(Y$qn=pe{Nr1|6JB$$BC5=^=7{v~r<7tT1g
+zPg(UHyPfMTPR&(pDpGP)>(2XlZMkwMS0`qR-q1ghhY3<Xv^$dcFRsyPr{HGPc}qVA
+zM)`T^(R|SXD#w=ysNsn32iq|JCD{x1q2u=vxmz?x*=jTBu#2rxa$vuk|LX7@_Hc%a
+zYX;b|7u^p~KX(s}_px{U0ov#8<G@6B<G~G>v)zqHOWm<j7t`H69B=Fie2>5ePRw?1
+z;MA#LV0aye_55In^K*d%-(YBZF4%ow1EbU0?N&e>XbIka@<=<KuPpA`z^lXB>9yH)
+z>>CVe<E3B`p)It5sp3*SIa65?7-qmX2W!{S)mHm0-V*o`^QDD5L$`%0akU>`k<Xv}
+ztdW+ULJF<psGfg%brE|DB2<R><u0}R1h?=hFOLAU);DpGZIoK?<~vc3eQ0318WH2a
+zB-${<nNc3`3)qhg`y38o4JJ{J5~mZN(en#FE?*&mJLthfuKE=x@QCBz_yqicllT*-
+z@EE6=)HC8BFTW0syO1j8_c9_nhq#XS$zvC7IpoQ*NwmR+!-6?SoMqe~-%<Pym!lw~
+qw!nkWQhG>U1*~xNn31pI1CCaS)XJ45j5Ur*wwtsGd`N2zKKdI1R#II6
+
+literal 0
+HcmV?d00001
+
+diff --git a/target/test-classes/dataAnalysis/Layout.class b/target/test-classes/dataAnalysis/Layout.class
+new file mode 100644
+index 0000000000000000000000000000000000000000..84a53d7fff0aa978c29f1b50e4c06a007c16bc54
+GIT binary patch
+literal 1249
+zcmZ`&YflqV5Iwis$9B6GEKr_45R`U#l!D-+6(N91EReX+r18_GtaWi|&F+?@|4NGn
+zqLKL7A7z|-snXce51r1rGiT<^On?3Ub^#!Z)d&I%eTUrVYgO(vJlo3@c%xSLBM36Y
+zkN64CIJ{cPY*y>X41xV^hJiwt_#8uUV|U9Wv-f6`O!Uz5%C24JHHJjtipca`yIP^}
+z*yhgu_GEFburI=sZ?9oh^JT}b+WrcIl1dkef4z2SsR*e^5HvrZ)xglNV*p8paK06r
+zN_E!U>V(q8C}j`n2qCN@qGD8XE(r9Nj)*{26?Y}NDA0R4RD{K^NgXlh3_S(AYVFjI
+z4=i_&A2^oKTPt&?$X#3b64am|C7Mi=)^5FBb~3Fa3XMei?`@AkuUP)Z)g1d%=}rkG
+z`h+`mi^7Le>F#6Huz-gVEHd=AZKC1%*0GKyEYrHU>+(jq_OZcWwD-4raAcMJT>I?)
+zLR(@T5m|iq9YeZ3t+nQK*R6_SJk{|CbOuZ9S?dn>yj-WocG=<*DNi$Nb+>H2u*JY*
+zmq$A%#E}-$u2i{Scj;xSjZ9?byEe3vTg}o&75Y<zR)@tg0Ay+X($d1|B_LJ<^p1$N
+zi%2?z8;Db04|yNR7oV5k!Agl<C2{i%eWw_d?r<<MBHc0R-VP=1NOwH^gQArt2F+5i
+zi7~SjYGT|x#l&Z#3gA9{Yh*>SS!(ZrM8ykTd#ms(!h?kC#`M@3ri|IIFs`!WQdE=#
+zXw-I0G9)FVju|P7GNmwu_+~NJV$G0cqOS1;#wS@;G!vF!T+-;50WF#+GMFbs%wn0^
+z6|+n>F;RN07#F3y(7COQo+CT+KO6feD@rHvxW!>mlcE7F!Hjb}`3ZJ?UI2ND4B#17
+Hq<#JeXO{bc
+
+literal 0
+HcmV?d00001
+
+diff --git a/target/test-classes/dataAnalysis/LayoutTreatment.class b/target/test-classes/dataAnalysis/LayoutTreatment.class
+new file mode 100644
+index 0000000000000000000000000000000000000000..9643052ca9831438a9fb9fbed456a9de71bf9c71
+GIT binary patch
+literal 1808
+zcmaJ>&sQ5&6#gEW$s}>KG!P)AwDnh;Kxi<vR7gdEibfNtO^Q<d^)h*c!C@wyOnMG0
+zkLT2d8xI>7U3SG*S)@IB4jXs=6aFXG`(^?Jh+WM4G55avzVEyD-M|0+;{d=rur%~B
+zT&!`A&)eMEX`0P!k?%Myui^^sZ42AepfL1r@kcysal4*fscs3wV+h|iZPS}$2&K}i
+z49cQY6ETDk)uAHHaIR?DV!5?l6>f!BEx`~kItI5^xogUO=cnRrnoWjF#g}2oGn{vY
+z=eV|0aS5x$<uF`J6_0V1J=e7B`E=K>1;?=jxARe)$AE@7MLG8G7<CLH!Jsb97t0?p
+z4D>i2!!VK>M#$O&q>c+1B{?2(t0joZNGiSFi%edI8PjnIml^cB@a~AF;hF{~B7>=J
+z*c~P@ypA_Dym3PPz^3CZyv-18wyI5^Hp5V=Q23u9*L0+iCWzu;i(3RS(XCsM&wToU
+zRB1v-M#`a7?%gLf6q}@$i943911=zJ)(E_A`31AeEq|NnNuFWYJFKX3Lm1|UX#|DF
+zaJ3swCw>nq5!__x`)g0?a!bd1n4z>a8<t7M*s~JW&%%y?N+~oobwdVuU&kCiV2Buw
+z?Qzp4Wk$Q9EN*hQOqvPX5TuVhGOuF+i$vZMcHP_bi@y*7NyRcze2jvIPfq4*r|F4p
+z9iQSea;A4h>Ibk)CwrGF)+54#Z|60XNTbs_FSJanCR};-ijKSZoI&#oZDr$>Zii_+
+z%Q=Q3%JNZGPG$a3>eUG70kfEN{8Gmn9uPs^Xb8K;Fxjoh;fXVsbZ}CQ7x9&juVsx#
+zJSXsv;ahMG-_iT=`JH60qbiZ94JiiE3#y575e`;#sz)LTuSs8l4s;p=?OcXf*=f0k
+zSTbe984N1ysFhup*OQc#3F>~Jk?uv9MvZn^ni<XN_%lR)r$rxPG)l8{eT7CnaG?2B
+z+A+L_b2Q4sze4fnnSJz^o?~cjHheIxhNhK0TuFu#N^W_wjf)eZa2r?JxcUUzKE_Lr
+z6_!vE>eCnhWPYO{!G#y-N<!fWOd^6bqL`%Mx9Cy{Vw^0%Ob3KqP2xJiP;iqtBq&Of
+zdfF6qcgZh@8v#Vt?{fuqC*tq6F<lDH?cs;aSS~)>#_cC~m{D^IeQkWG)ClFQl2qb%
+z$Z=NP$I_oDt|iq_?m3p9;a>cH8(*}s-o`gaHsvKY^{nl2h>c|qp1$~T;+XlkFL<1|
+z4iLK`>X*aRxkiXd5+!Q0CPwiS*?z%gUx_(isof(bc47ERX!sd52vQ<S{u`*15-BRm
+TO|mK!twNCmsll-2tN#6ehIg%o
+
+literal 0
+HcmV?d00001
+
+diff --git a/target/test-classes/dataAnalysis/ProcessData.class b/target/test-classes/dataAnalysis/ProcessData.class
+new file mode 100644
+index 0000000000000000000000000000000000000000..8299e3fd5d0567d4df0d2ef5c82c64099b249bf1
+GIT binary patch
+literal 2948
+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
+L6ZnpDHTeENyqV6=
+
+literal 0
+HcmV?d00001
+
+diff --git a/target/test-classes/dataAnalysis/Report.class b/target/test-classes/dataAnalysis/Report.class
+new file mode 100644
+index 0000000000000000000000000000000000000000..ccaa71a3db943618e0cd1c3c0ebf0f85c8c28de8
+GIT binary patch
+literal 1102
+zcmbVKPfrs;9DUPn|4^!hLJL|%@ei~h7Kq_eH8DgJk_MtRnCNLJBMjN@;_j5#J0HP|
+zM^9Wl=mirGT)g>F{1ED!E+~d35VFZ{W_I4Z_kM5Y$FFaP0Om29LQG(2LmK(mlWr%}
+zVfDG%@dJ~BBQUTncV*R;-ez@meOon+K=Oh1w0R^DFIUzCoF#ulWe`VS76~K;a&_&g
+zm3C`g1ux{fs|50OzbV}{8ECsc`stW09SRicJ)~<CZni_?w^Z<~Ej^=6htP8UpPPmW
+zw6|HSET=Ij5c|HL!4L{54FBgjLS<3Jh(IFTaWxy5>c#W=G<O<T*yP;Yf~78HF@|db
+z>89@)sXbaRo#a{Cl0iegZ7Z*-YL!<4DOYy<wjnNmnwqhNeoG37Wd<4{c?&&E5Te=A
+zaSE$%8p?H5kj7Nk+q}SF%MZ<ycRR`p^{#42oA~5OYsXRbveEz24?+`h3S=67J7}t>
+z+H&+q&)}ZT921}%9}IZMOcF`f6jxP_!v3B9iu4ywV#u)CZSX)pYc>LKyu_8jW#m}x
+z;rB!*I8MhO&g2IUkY9-}I{PTh7Mz9r=mD;NKyoi8_8d`gW)DC9{yFxE=tyC_%fQEr
+zH2V1Es9U1mIOk<*SmpZ>`;jtrxO<)2F(PiTr5LdjxQSbIYOnV;R}S~@oX_Fpc^nQ?
+zr9hn`IY;Pllpc!Iw_Y#qu#C!4hKt>Pn99uOzu83TPjnTE)VG;M>DyV9fnXYEb4;DV
+JG1KL~`v-K%#B=}v
+
+literal 0
+HcmV?d00001
+
+diff --git a/target/test-classes/dataAnalysis/Teste.class b/target/test-classes/dataAnalysis/Teste.class
+new file mode 100644
+index 0000000000000000000000000000000000000000..e26efb6b1ddebb55a26b887b936cd976dfd01877
+GIT binary patch
+literal 1155
+zcmZ`&O-~b16g{skOj}357RpDf7C+k}R1`#LQ2`-oY=i_tLfkmCk2+*J(@dvE7Vi8h
+zCdQq*D2XI)-1&oCs^_&(s^DVY*S+uDbI*D6<JZ@30H(2~!6y(Y8=kRb8`eSHtY^1m
+z-IE#u0t5TTYa?qJb|t&MyDv+gKyTi(P4AI_Kb77V2&_0|8HOJr9X;q3=r5YKeBP+;
+zN_WfHwIsodPRX#g4cAor<HLaW%B%|v7SC4B31}7RZMaTNU?i0;wn#KQ)5@wd>3XKD
+zGbz0KrX*{g>DYA*5rJqc&vded^-e^?Ad8#_5JnUs4Z{M%C->G&OBU=}!`t*+X;gz4
+zWjiIu-kYj*>V^?RT(z1I7)rINwe;Z~)2`&w+Y0!Kj;lyg9m_Gws)=@@;&zJ9T!9`1
+zO(A0c>oTxMRsy3Pgnw94h(OgaZ9=48oX01G6fzppf4RANK#Qw7CUA#NIt>~-)Tyw+
+zPL4ImX_z`usH@H8hG~_h8^m4Ou#~JjRU`TRV=|0M#MN+L#|&oqSd3at+EgHsDjfTG
+z7A2={%;|WDd4Ztkw3Vc7C)RgeVQvnK8uDFschS}HNExHmR0kF{2^emL>PF8|hC#(!
+zKot0yY-H1ExFxCd<)-x$OsS`VaZn@vE#OGU(92QdF3VYP?#Ub?_?ZhI!W>l?2;u@q
+zy`8}MB6lJ5p`Td;Tn8Ar)PgYx>*LAj5u!VX7<zVu*iK~R5M#y6L=%@YpBQXIj}csf
+z1_`GVtdDbqki&#j<zmbW5_TNdxQh_}I&QE~2sd$yvts?0rByc*{=9$j1H$pd%ltc^
+zFELPl|NG|`+&;qOP9%GX>39?Ont0H}!f9`90y8W#ORzZ>oy8#Lk-<WXK(Y;u$9TdL
+WKBTdPWfl&Q;0jkhuAjCdtA7B3zyF2+
+
+literal 0
+HcmV?d00001
+
+-- 
+2.17.0.windows.1
+
