@@ -33,7 +33,11 @@ public class ProcessData {
 	}
 
 	public void run() throws IOException {
+		//Insert values layout file base
+		writeToBinaryFile();
+		//Report
 		ReportAcess reportAcess = new ReportAcess();
+		reportAcess.ReportAcess();
 		reportAcess.readBinaryFile();
 
 	}
