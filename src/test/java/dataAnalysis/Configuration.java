@@ -9,8 +9,8 @@ public class Configuration {
 
 	public void generatingConfigurationFile() throws IOException {
 		Properties properties = new Properties();
-		properties.setProperty("directoryPath IN", "\\data\\in");
-		properties.setProperty("directoryPath OUT", "\\data\\out");
+		properties.setProperty("directoryPathIn", "\\data\\in");
+		properties.setProperty("directoryPathOut", "\\data\\out");
 		FileWriter writer = new FileWriter("conf.properties");
 		properties.store(writer, "Author:Jefferson");
 		writer.close();
